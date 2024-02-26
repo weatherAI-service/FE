@@ -1,7 +1,12 @@
 import React from "react";
+import LayOut from "../components/LayOut";
 
 const MainPage = () => {
-  return <div>안녕하세요</div>;
+  return (
+    <>
+      <LayOut />
+    </>
+  );
 };
 
 export default MainPage;
