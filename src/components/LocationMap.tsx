@@ -13,7 +13,7 @@ const LocationMap = () => {
   return (
     <Wrapper>
       <LocationBox />
-      <div>현재위치</div>
+      <CurrentLocation>현재위치</CurrentLocation>
     </Wrapper>
   );
 };
@@ -22,8 +22,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 10px;
-  border: 1px solid black;
+  margin-top: 20px;
 `;
 
 const LocationBox = styled.div`
@@ -33,4 +32,8 @@ const LocationBox = styled.div`
   margin-right: 8px;
 `;
 
+const CurrentLocation = styled.div`
+  font-family: "GongGothicMedium";
+  font-size: 18px;
+`;
 export default LocationMap;
