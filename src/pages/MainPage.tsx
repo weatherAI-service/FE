@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import LocationMap from "../components/LocationMap";
 import Weather from "../components/Weather";
+import ChatGptAI from "../components/ChatGptAI";
 
 const MainPage = () => {
   return (
@@ -11,6 +12,7 @@ const MainPage = () => {
           <SecondContainer>
             <LocationMap />
             <Weather />
+            <ChatGptAI />
           </SecondContainer>
         </FistContainer>
       </FirstBoxContainer>
