@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import LocationMap from "../components/LocationMap";
 import Weather from "../components/Weather";
@@ -6,6 +6,9 @@ import ChatGptAI from "../components/ChatGptAI";
 import LogoImage from "../assets/images/logo.png";
 
 const MainPage = () => {
+
+  const [weatherInfo, setWeatherInfo] = useState<string | undefined>();
+
   return (
     <MainPageContainer>
       <FirstBoxContainer>
@@ -13,7 +16,7 @@ const MainPage = () => {
           <SecondContainer>
             <LocationMap />
             <Weather />
-            <ChatGptAI />
+            <ChatGptAI weatherInfo={weatherInfo}/>
           </SecondContainer>
         </FistContainer>
       </FirstBoxContainer>
@@ -39,8 +42,8 @@ const FirstBoxContainer = styled.div`
   justify-content: end;
 `;
 const FistContainer = styled.div`
-  width: 355px;
-  height: 660px;
+  width: 375px;
+  height: 720px;
   background-color: black;
   border-radius: 30px;
   display: flex;
@@ -49,8 +52,8 @@ const FistContainer = styled.div`
   margin: auto 0px;
 `;
 const SecondContainer = styled.div`
-  width: 335px;
-  height: 640px;
+  width: 355px;
+  height: 700px;
   background-color: #e7edf5;
   border-radius: 30px;
 `;
