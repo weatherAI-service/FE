@@ -1,4 +1,5 @@
 import React from "react";
+import { IoLocationOutline } from "react-icons/io5";
 import styled from "styled-components";
 
 const { kakao } = window;
@@ -12,7 +13,7 @@ declare global {
 const LocationMap = () => {
   return (
     <Wrapper>
-      <LocationBox />
+      <IoLocationOutline style={{ width: "23px", height: "23px" }} />
       <CurrentLocation>현재위치</CurrentLocation>
     </Wrapper>
   );
