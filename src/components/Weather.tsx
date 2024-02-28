@@ -1,35 +1,42 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import weather from "../assets/images/weather.png";
+import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import axios from "axios";
 
 const Weather = () => {
-  const [weatherDescription, setWeatherDescription] = useState<string>("");
+  const { data, isLoading, isError } = useQuery("weather", getWeather);
 
-  const getWeather = async (): Promise<void> => {
+  async function getWeather() {
     const weatherKey = process.env.REACT_APP_WEATHERKEY;
-    try {
-      const response = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=seoul&appid=${weatherKey}`
-      );
-      console.log(response, "답");
-      const data = response.data;
-      if (data.cod === 200) {
-        const description = data.weather[0].description;
-        setWeatherDescription(description);
-        // setClothesRecommend(clothesRecommend(description));
-      } else {
-        console.log("날씨 정보를 가져오는 데 문제가 발생했습니다.");
-      }
-    } catch (error) {
-      console.log("날씨 정보를 가져오는 데 문제가 발생했습니다.", error);
-    }
-  };
+    const response = await axios.get(
+      `https://api.openweathermap.org/data/2.5/weather?q=seoul&appid=${weatherKey}`
+    );
+    console.log("날씨 데이터:", response.data);
+    return response.data;
+  }
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error fetching weather data</div>;
+
+  const description = data.weather[0].description;
+  const temperature = Math.round(data.main.temp - 273.15);
+
   return (
     <WeatherContainer>
       <WeatherIcon src={weather} alt="" />
-      <WeatherTemperature onClick={getWeather}>15°C</WeatherTemperature>
+      <WeatherTemperature>{temperature}°C</WeatherTemperature>
     </WeatherContainer>
+  );
+};
+
+const WeatherComponent = () => {
+  const queryClient = new QueryClient();
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Weather />
+    </QueryClientProvider>
   );
 };
 
@@ -59,4 +66,4 @@ const WeatherTemperature = styled.div`
   justify-content: center;
 `;
 
-export default Weather;
+export default WeatherComponent;
