@@ -6,7 +6,6 @@ import ChatGptAI from "../components/ChatGptAI";
 import LogoImage from "../assets/images/logo.png";
 
 const MainPage = () => {
-
   const [weatherInfo, setWeatherInfo] = useState<string | undefined>();
 
   return (
@@ -16,32 +15,33 @@ const MainPage = () => {
           <SecondContainer>
             <LocationMap />
             <Weather />
-            <ChatGptAI weatherInfo={weatherInfo}/>
+            <ChatGptAI weatherInfo={weatherInfo} />
           </SecondContainer>
         </FistContainer>
       </FirstBoxContainer>
-      <FirstBoxContainer style={{justifyContent: "start"}}>
+      <FirstBoxContainer style={{ justifyContent: "start" }}>
         <SecondBoxContainer>
-          <Logo src={LogoImage} alt=""/>
+          <Logo src={LogoImage} alt="" />
         </SecondBoxContainer>
       </FirstBoxContainer>
     </MainPageContainer>
   );
 };
 
-const MainPageContainer = styled.div`
+export const MainPageContainer = styled.div`
   width: 100%;
-  background-color: aliceblue;
+  background-color: white;
   height: 100vh;
   display: flex;
 `;
-const FirstBoxContainer = styled.div`
+
+export const FirstBoxContainer = styled.div`
   width: 50%;
   height: 100vh;
   display: flex;
   justify-content: end;
 `;
-const FistContainer = styled.div`
+export const FistContainer = styled.div`
   width: 375px;
   height: 720px;
   background-color: black;
@@ -51,13 +51,13 @@ const FistContainer = styled.div`
   align-items: center;
   margin: auto 0px;
 `;
-const SecondContainer = styled.div`
+export const SecondContainer = styled.div`
   width: 355px;
   height: 700px;
   background-color: #e7edf5;
   border-radius: 30px;
 `;
-const SecondBoxContainer = styled(FistContainer)`
+export const SecondBoxContainer = styled(FistContainer)`
   background-color: transparent;
 `;
 const Logo = styled.img`

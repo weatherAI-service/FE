@@ -43,7 +43,7 @@ const WeatherComponent = () => {
 const WeatherContainer = styled.div`
   position: relative;
   display: inline-block;
-  margin-top: 50px;
+  margin-top: 30px;
 `;
 
 const WeatherIcon = styled.img`
