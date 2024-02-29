@@ -85,7 +85,7 @@ const AiContainer = styled.div`
   border-radius: 30px;
   width: 96%;
   display: flex;
-  margin: 0px auto
+  margin: 0px auto;
 `;
 
 const PeopleImg = styled.img`
