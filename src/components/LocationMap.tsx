@@ -3,12 +3,40 @@ import { IoLocationOutline } from "react-icons/io5";
 import styled from "styled-components";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const LocationMap = () => {
   const [map, setMap] = useState<any>();
   const [marker, setMarker] = useState<any>();
+  const [currentAddress, setCurrentAddress] = useState<string>("");
 
   const navigate = useNavigate();
+
+  const kakaoKey = process.env.REACT_APP_KAKAOMAP_REST_API;
+
+  // 위도와 경도를 사용하여 주소를 가져오는 함수
+  const getFormattedAddress = async (latitude: number, longitude: number) => {
+    try {
+      const res = await axios.get(
+        `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${longitude}&y=${latitude}`,
+        {
+          headers: {
+            Authorization: `KakaoAK ${kakaoKey}`, // kakaoKey는 어딘가에서 가져와야 합니다.
+          },
+        }
+      );
+      console.log("주소 데이터", res);
+      if (res.data.documents && res.data.documents.length > 0) {
+        return res.data.documents[0].address.address_name;
+      } else {
+        return "주소를 찾을 수 없습니다.";
+      }
+    } catch (error) {
+      console.error("주소를 가져오는데 오류가 발생했습니다:", error);
+      return "주소를 가져오는데 오류가 발생했습니다.";
+    }
+  };
+
   // 카카오맵 불러오기
   useEffect(() => {
     window.kakao.maps.load(() => {
@@ -34,7 +62,7 @@ const LocationMap = () => {
   const getCurrentPosBtn = () => {
     navigator.geolocation.getCurrentPosition(
       getPosSuccess,
-      () => alert("위치 정보를 가져오는데 실패했습니다."),
+      getPosError, // 위치 정보 가져오기 실패 시 처리하는 함수
       {
         enableHighAccuracy: true,
         maximumAge: 30000,
@@ -44,12 +72,22 @@ const LocationMap = () => {
   };
 
   // 3) 정상적으로 현재위치 가져올 경우 실행
-  const getPosSuccess = (pos: GeolocationPosition) => {
+  const getPosSuccess = async (pos: GeolocationPosition) => {
     // 현재 위치(위도, 경도) 가져온다.
     var currentPos = new window.kakao.maps.LatLng(
       pos.coords.latitude, // 위도
       pos.coords.longitude // 경도
     );
+
+    // 위도 경도 변수 저장
+    const latitude = pos.coords.latitude;
+    const longitude = pos.coords.longitude;
+    console.log("현재 위치:", latitude, longitude);
+
+    // 현재 위치를 주소로 변환
+    const address = await getFormattedAddress(latitude, longitude);
+    setCurrentAddress(address);
+
     // 지도를 이동 시킨다.
     map.panTo(currentPos);
 
@@ -62,16 +100,20 @@ const LocationMap = () => {
     setMarker(newMarker); // 마커 상태 업데이트
   };
 
+  // 3-1) 위치 정보 가져오기 실패
+  const getPosError = () => {
+    alert("위치 정보를 가져오는데 실패했습니다.");
+  };
   return (
     <>
-      <Wrapper>
+      <Wrapper onClick={getCurrentPosBtn}>
         <IoLocationOutline
           style={{ width: "23px", height: "23px", cursor: "pointer" }}
           onClick={() => {
             navigate("/map");
           }}
         />
-        <CurrentLocation onClick={getCurrentPosBtn}>현재위치</CurrentLocation>
+        <CurrentLocation>{currentAddress}</CurrentLocation>
       </Wrapper>
       <MapContainer id="map">
         {/* 지도를 렌더링할 컨테이너 요소 */}

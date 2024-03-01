@@ -13,7 +13,6 @@ const MainPage = () => {
       <FirstBoxContainer>
         <FistContainer>
           <SecondContainer>
-            <LocationMap />
             <Weather />
             <ChatGptAI weatherInfo={weatherInfo} />
           </SecondContainer>
