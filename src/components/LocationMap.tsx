@@ -4,11 +4,14 @@ import styled from "styled-components";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useRecoilState } from "recoil";
+import { addressState } from "../utils/Address";
 
 const LocationMap = () => {
   const [map, setMap] = useState<any>();
   const [marker, setMarker] = useState<any>();
-  const [currentAddress, setCurrentAddress] = useState<string>("");
+  const [currentAddress, setCurrentAddress] =
+    useRecoilState<string>(addressState);
 
   const navigate = useNavigate();
 
@@ -27,7 +30,9 @@ const LocationMap = () => {
       );
       console.log("주소 데이터", res);
       if (res.data.documents && res.data.documents.length > 0) {
-        return res.data.documents[0].address.address_name;
+        const address = res.data.documents[0].address.address_name;
+        setCurrentAddress(address); // 현재 주소 설정
+        return address;
       } else {
         return "주소를 찾을 수 없습니다.";
       }
@@ -104,14 +109,15 @@ const LocationMap = () => {
   const getPosError = () => {
     alert("위치 정보를 가져오는데 실패했습니다.");
   };
+
   return (
     <>
       <Wrapper onClick={getCurrentPosBtn}>
         <IoLocationOutline
           style={{ width: "23px", height: "23px", cursor: "pointer" }}
-          onClick={() => {
-            navigate("/map");
-          }}
+          // onClick={() => {
+          //   navigate("/map");
+          // }}
         />
         <CurrentLocation>{currentAddress}</CurrentLocation>
       </Wrapper>
@@ -119,7 +125,7 @@ const LocationMap = () => {
         {/* 지도를 렌더링할 컨테이너 요소 */}
         <Map
           center={{ lat: 37.5662952, lng: 126.9779451 }}
-          style={{ width: "100%", height: "400px" }}
+          style={{ width: "100%", height: "400px", display: "none" }}
         >
           <MapMarker position={{ lat: 37.5662952, lng: 126.9779451 }} />
         </Map>
@@ -132,7 +138,6 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
   margin-top: 20px;
 `;
 

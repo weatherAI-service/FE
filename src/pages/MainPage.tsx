@@ -1,18 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import LocationMap from "../components/LocationMap";
 import Weather from "../components/Weather";
 import ChatGptAI from "../components/ChatGptAI";
 import LogoImage from "../assets/images/logo.png";
+import { useRecoilState } from "recoil";
+import { addressState } from "../utils/Address";
+import LocationMap from "../components/LocationMap";
 
 const MainPage = () => {
+  const [currentAddress] = useRecoilState<string>(addressState);
   const [weatherInfo, setWeatherInfo] = useState<string | undefined>();
 
+  useEffect(() => {
+    console.log("currentAddress:", currentAddress);
+  }, [currentAddress]);
   return (
     <MainPageContainer>
       <FirstBoxContainer>
         <FistContainer>
           <SecondContainer>
+            <LocationMap />
             <Weather />
             <ChatGptAI weatherInfo={weatherInfo} />
           </SecondContainer>
